@@ -1,0 +1,58 @@
+ingestion:
+  # Source Configuration
+  source:
+    type: "s3"  # Options: s3, gcs, azure_blob, local, hdfs
+    format: "csv"  # Options: csv, json, parquet, orc, avro, txt, xml, xlsx
+    path: "s3://my-bucket/input/data/"
+    options:
+      header: true
+      inferSchema: true
+      delimiter: ","
+      encoding: "utf-8"
+    # Cloud credentials (optional - can use IAM roles)
+    credentials:
+      access_key: "${AWS_ACCESS_KEY_ID}"
+      secret_key: "${AWS_SECRET_ACCESS_KEY}"
+      region: "us-east-1"
+
+  # Target Configuration
+  target:
+    type: "snowflake"  # Options: snowflake, redshift, bigquery, databricks, postgres, mysql, s3, gcs, azure_blob, local, hdfs
+    format: "parquet"  # Options: csv, json, parquet, orc, avro
+    path: "s3://my-bucket/output/data/"
+    options:
+      mode: "overwrite"  # Options: overwrite, append, ignore, error
+      partitionBy: ["date", "region"]
+      repartition: 4
+    # For database targets
+    database_config:
+      host: "${DB_HOST}"
+      port: 5432
+      database: "${DB_NAME}"
+      user: "${DB_USER}"
+      password: "${DB_PASSWORD}"
+      table: "target_table"
+      mode: "overwrite"
+
+  # Spark Configuration
+  spark:
+    master: "local[*]"
+    app_name: "DIF_Ingestion"
+    cores: 4
+    memory: "4g"
+    driver_memory: "2g"
+    executor_memory: "2g"
+    shuffle_partitions: 200
+
+  # Processing Configuration
+  processing:
+    validate: true
+    dedup: false
+    sample_data: false
+    sample_fraction: 0.1
+    cache_intermediate: false
+
+  # Logging
+  logging:
+    level: "INFO"
+    log_file: "logs/ingestion.log"
