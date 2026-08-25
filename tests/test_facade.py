@@ -1,6 +1,5 @@
 # Unit tests for facade
 
-import pytest
 from unittest.mock import Mock, patch, MagicMock
 from pyspark.sql import SparkSession, DataFrame
 

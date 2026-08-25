@@ -20,6 +20,7 @@ class SourceConfig:
     path: str
     options: Dict[str, Any]
     credentials: Dict[str, str]
+    database_config: Dict[str, Any]
 
 
 @dataclass
@@ -118,7 +119,8 @@ class ConfigLoader:
             format=source.get('format'),
             path=source.get('path'),
             options=source.get('options', {}),
-            credentials=source.get('credentials', {})
+            credentials=source.get('credentials', {}),
+            database_config=source.get('database_config', {})
         )
 
     @staticmethod
