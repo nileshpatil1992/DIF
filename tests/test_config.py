@@ -96,6 +96,31 @@ class TestConfigLoaderExtraction:
         assert source_config.type == 's3'
         assert source_config.format == 'csv'
         assert source_config.path == 's3://test-bucket/input/data.csv'
+        assert source_config.database_config == {}
+
+    def test_get_source_config_with_database_config(self, sample_config):
+        """Test extracting database source configuration."""
+        sample_config['ingestion']['source'] = {
+            'type': 'snowflake',
+            'format': 'snowflake',
+            'path': None,
+            'options': {},
+            'credentials': {},
+            'database_config': {
+                'host': 'test-account.snowflakecomputing.com',
+                'user': 'test-user',
+                'database': 'raw',
+                'schema': 'public',
+                'table': 'customers'
+            }
+        }
+
+        source_config = ConfigLoader.get_source_config(sample_config)
+
+        assert isinstance(source_config, SourceConfig)
+        assert source_config.type == 'snowflake'
+        assert source_config.database_config['host'] == 'test-account.snowflakecomputing.com'
+        assert source_config.database_config['table'] == 'customers'
     
     def test_get_target_config(self, sample_config):
         """Test extracting target configuration."""
