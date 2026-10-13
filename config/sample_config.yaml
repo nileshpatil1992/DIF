@@ -3,7 +3,7 @@ ingestion:
   source:
     type: "s3"  # Options: s3, gcs, azure_blob, local, hdfs
     format: "csv"  # Options: csv, json, parquet, orc, avro, txt, xml, xlsx
-    path: "s3://my-bucket/input/data/"
+    path: "s3://ingestion/dataset/"
     options:
       header: true
       inferSchema: true
@@ -11,8 +11,8 @@ ingestion:
       encoding: "utf-8"
     # Cloud credentials (optional - can use IAM roles)
     credentials:
-      access_key: "${AWS_ACCESS_KEY_ID}"
-      secret_key: "${AWS_SECRET_ACCESS_KEY}"
+      access_key: "admin"
+      secret_key: "password"
       region: "us-east-1"
 
   # Target Configuration
